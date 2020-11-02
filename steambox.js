@@ -92,7 +92,16 @@ module.exports = {
         })
         },
         WTFIsThisPipe:  ()=>{
+            let reader = fs.createReadStream(csv)
+            let writer = fs.createWriteStream("COPY-"+csv)
+            let re = /s^[\t]*/
 
+            reader.on('data',(chunk)=>{
+                console.log(chunk.toString())
+                chunk.filter((e)=> e!= "") // exemple de filtre
+                chunk.toString().replace(re,"")
+                chunk.reverse()
+            })
         }
 
 
