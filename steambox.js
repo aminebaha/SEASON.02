@@ -49,23 +49,31 @@ module.exports = {
     },
 
     csv2json:(csv) =>{
+     
         let reader = fs.createReadStream(csv)
         let writer = fs.createWriteStream("COPY-"+csv)
-        let lines=csv.split("\n");
-        var headers=lines[0].split(",");
-        let result ={}
-        for(var i=1;i<lines.length;i++){
-            var currentline=lines[i].split(",");
-            
-            for(var j=0;j<headers.length;j++){
-                obj[headers[j]] = currentline[j];
+        let result= ""
+        let objects = {}
+        let lines =""
+        let res = {}
+        let finalres = []
+        reader.on('data',(chunk)=> {
+         result += chunk.toString().replace(/\r/,"\n")
+         result = result.split("\n").filter(e=> e!="")
+         objects = result[0].split(";")
+          
+   
+        for(let i=1;i<result.length;i++) {
+            lines = result[i].split(";")
+        
+            for(let j=0;j<objects.length;j++){
+                res[objects[j]] = lines[j]
             }
-
-    result.push(obj);
-
-}   
-   writer.write(JSON.stringify(result))
-
-},
+                finalres.push(res)
+        }   
+     
+        writer.write(JSON.stringify(finalres))
+            
+        })
+        }
     }
-
