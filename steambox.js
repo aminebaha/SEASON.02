@@ -47,6 +47,21 @@ module.exports = {
         return (in_stdout ? transform(filename,re,fn) : transformV2(filename,re,fn))
     
     },
+    transformCorrection:(filename, re, fn, in_stdout = true) =>{
+        const transformer = new Transform({
+          transform(chunk, _, callback) {
+            this.push(chunk.toString().replace(re, fn))
+      
+            callback()
+          }
+        })
+      
+        const readStream = fs.createReadStream(filename)
+        
+        readStream
+          .pipe(transformer)
+          .pipe(process.stdout)
+      },
 
     csv2json:(csv) =>{
      
@@ -75,5 +90,10 @@ module.exports = {
         writer.write(JSON.stringify(finalres))
             
         })
+        },
+        WTFIsThisPipe:  ()=>{
+
         }
+
+
     }
