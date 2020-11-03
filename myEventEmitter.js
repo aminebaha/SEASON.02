@@ -12,11 +12,21 @@ class myEventEmitter {
             this.empty[eventName] = []
         }
         this.empty[eventName].push(fn)
-        console.log(this.empty[eventName])
+        
     }
-    emit(eventName,data) {
-        console.log(this.empty)
+    emit(eventName,...data) {
        
+        if(data===undefined) {
+            return undefined
+        }
+        else {
+
+        
+       this.empty[eventName].forEach(element => {
+           
+        element(data)
+       });
+    }
 
     }
 }

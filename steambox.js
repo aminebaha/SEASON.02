@@ -91,16 +91,22 @@ module.exports = {
             
         })
         },
-        WTFIsThisPipe:  ()=>{
-            let reader = fs.createReadStream(csv)
-            let writer = fs.createWriteStream("COPY-"+csv)
-            let re = /s^[\t]*/
+        WTFIsThisPipe:  (filename)=>{
+            let reader = fs.createReadStream(filename)
+            let writer = fs.createWriteStream("COPY-"+filename)
+            let re = /function/
+            let result = ""
 
             reader.on('data',(chunk)=>{
-                console.log(chunk.toString())
-                chunk.filter((e)=> e!= "") // exemple de filtre
-                chunk.toString().replace(re,"")
-                chunk.reverse()
+                result = chunk.toString()
+                result = chunk.toString().split(/\r\n/).filter((e)=> e == "function") // exemple de filtre
+                chunk.forEach(element =>  console.log(element.toString().replace(re,"I will finish:")))
+                console.log("Z : " +result.toString())
+
+                result = chunk.reverse()
+                result =chunk.slice(2)
+                result = chunk.reverse()
+                console.log(result.toString())
             })
         }
 
